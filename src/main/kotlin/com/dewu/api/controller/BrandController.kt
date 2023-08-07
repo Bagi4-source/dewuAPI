@@ -35,6 +35,13 @@ class BrandController(@Autowired final val brandRepository: BrandRepository) {
         return ResponseEntity.ok(brandService.getBrandByName(brandName = brandName))
     }
 
+    @PostMapping("/getBrands")
+    fun getBrands(
+            @RequestBody brandIds: List<Long>
+    ): ResponseEntity<List<Brand>> {
+        return ResponseEntity.ok(brandService.getBrandsByIds(brandIds))
+    }
+
     @GetMapping
     fun getAllBrands(
             brandId: Long?,

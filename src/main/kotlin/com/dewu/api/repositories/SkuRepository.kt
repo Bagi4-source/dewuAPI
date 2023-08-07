@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository
 interface SkuRepository : MongoRepository<Sku, String> {
     fun findBySkuId(skuId: Long): Sku?
     fun findAllBy(pageable: Pageable): Page<Sku>
+    fun findAllBySkuIdIn(skuIds: List<Long>): List<Sku>
 }

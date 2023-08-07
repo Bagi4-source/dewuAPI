@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/trade-types")
+@RequestMapping("/tradeTypes")
 class TradeTypeController(@Autowired final val tradeTypeRepository: TradeTypeRepository) {
     val tradeTypeService = TradeTypeService(tradeTypeRepository)
 
@@ -28,6 +28,13 @@ class TradeTypeController(@Autowired final val tradeTypeRepository: TradeTypeRep
     @GetMapping("/{tradeType}")
     fun getTradeTypeById(@PathVariable tradeType: Int): ResponseEntity<TradeType> {
         return ResponseEntity.ok(tradeTypeService.getTradeTypeId(tradeType = tradeType))
+    }
+
+    @PostMapping("/getTradeTypes")
+    fun getTradeTypes(
+            @RequestBody tradeTypes: List<Int>
+    ): ResponseEntity<List<TradeType>> {
+        return ResponseEntity.ok(tradeTypeService.getTradeTypesByIds(tradeTypes))
     }
 
     @GetMapping

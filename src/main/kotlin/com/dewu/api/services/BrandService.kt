@@ -26,6 +26,12 @@ class BrandService(
         return brandRepository.findAllBy(pageable)
     }
 
+    fun getBrandsByIds(brandIds: List<Long>): List<Brand> {
+        if (brandIds.size > 100)
+            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
+        return brandRepository.findAllByBrandIdIn(brandIds)
+    }
+
     fun updateBrand(brand: BrandDTO): Brand {
         val instance = this.getBrandById(brandId = brand.brandId)
         instance.name = brand.name

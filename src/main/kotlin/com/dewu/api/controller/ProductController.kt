@@ -8,7 +8,6 @@ import com.dewu.api.services.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 
 @RestController
@@ -31,6 +30,13 @@ class ProductController(
     @GetMapping("/{spuId}")
     fun getProductBySpuId(@PathVariable("spuId") spuId: Long): ResponseEntity<Product> {
         return ResponseEntity.ok(productService.getProductById(spuId = spuId))
+    }
+
+    @PostMapping("/getProducts")
+    fun getProducts(
+            @RequestBody productIds: List<Long>
+    ): ResponseEntity<List<Product>> {
+        return ResponseEntity.ok(productService.getProductsByIds(productIds))
     }
 
     @GetMapping

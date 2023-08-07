@@ -22,6 +22,12 @@ class CategoryService(
         return categoryRepository.findAllBy(pageable)
     }
 
+    fun getCategoriesByIds(categoryIds: List<Long>): List<Category> {
+        if (categoryIds.size > 100)
+            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
+        return categoryRepository.findAllByCatIdIn(categoryIds)
+    }
+
     fun updateCategory(category: CategoryDTO): Category {
         val instance = this.getCategoryById(catId = category.catId)
         instance.name = category.name

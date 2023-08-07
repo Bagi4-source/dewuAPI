@@ -30,6 +30,13 @@ class CategoryController(@Autowired final val categoryRepository: CategoryReposi
         return ResponseEntity.ok(categoryService.getCategoryById(catId = catId))
     }
 
+    @PostMapping("/getCategories")
+    fun getCategories(
+            @RequestBody catIds: List<Long>
+    ): ResponseEntity<List<Category>> {
+        return ResponseEntity.ok(categoryService.getCategoriesByIds(catIds))
+    }
+
     @GetMapping
     fun getAllCategories(
             @RequestParam(defaultValue = "50") limit: Int,

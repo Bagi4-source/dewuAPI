@@ -30,11 +30,13 @@ class SkuController(@Autowired final val skuRepository: SkuRepository) {
         return ResponseEntity.ok(skuService.getSkuById(skuId = skuId))
     }
 
+    @PostMapping("/getSkus")
+    fun getSkus(@RequestBody skuIds: List<Long>): ResponseEntity<List<Sku>> {
+        return ResponseEntity.ok(skuService.getSkusByIds(skuIds))
+    }
+
     @GetMapping
-    fun getAllSkus(
-            @RequestParam(defaultValue = "50") limit: Int,
-            @RequestParam(defaultValue = "0") page: Int
-    ): ResponseEntity<PageDTO<Sku>> {
+    fun getAllSkus(@RequestParam(defaultValue = "50") limit: Int, @RequestParam(defaultValue = "0") page: Int): ResponseEntity<PageDTO<Sku>> {
         return ResponseEntity.ok(PageDTO(skuService.getAllSkus(limit, page)))
     }
 }

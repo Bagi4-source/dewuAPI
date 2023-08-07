@@ -22,6 +22,12 @@ class SkuService(
         return skuRepository.findAllBy(pageable)
     }
 
+    fun getSkusByIds(skuIds: List<Long>): List<Sku> {
+        if (skuIds.size > 100)
+            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
+        return skuRepository.findAllBySkuIdIn(skuIds)
+    }
+
     fun updateSku(sku: SkuDTO): Sku {
         val instance = this.getSkuById(skuId = sku.skuId)
         instance.prices = sku.prices

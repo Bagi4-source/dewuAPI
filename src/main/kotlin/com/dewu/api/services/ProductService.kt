@@ -22,6 +22,12 @@ class ProductService(
         return productRepository.findAll(pageable)
     }
 
+    fun getProductsByIds(productIds: List<Long>): List<Product> {
+        if (productIds.size > 100)
+            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
+        return productRepository.findAllBySpuIdIn(productIds)
+    }
+
     fun updateProduct(product: ProductDTO): Product {
         val instance = this.getProductById(spuId = product.spuId)
         instance.title = product.title
