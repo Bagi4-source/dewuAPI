@@ -1,7 +1,9 @@
 package com.dewu.api.controller
 
+import com.dewu.api.dto.PageDTO
 import com.dewu.api.dto.ProductDTO
-import com.dewu.api.models.Product
+import com.dewu.api.entities.Product
+import com.dewu.api.repositories.ProductRepository
 import com.dewu.api.services.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -11,25 +13,31 @@ import java.util.*
 
 @RestController
 @RequestMapping("/products")
-class ProductController(@Autowired val productService: ProductService) {
+class ProductController(
+        @Autowired final val productRepository: ProductRepository,
+) {
+    val productService = ProductService(productRepository)
+
     @PostMapping
-    fun addProduct(@RequestBody product: ProductDTO): Product? {
-        val instance = Product(
-                spuId = product.spuId,
-                price = product.price
-        )
-        return productService.insert(instance)
+    fun addProduct(@RequestBody product: ProductDTO): ResponseEntity<Product?> {
+        return ResponseEntity.ok(productService.createProduct(product))
     }
 
-    @GetMapping
-    fun getProducts(): List<Product>? {
-        return productService.findAll()
+    @PutMapping
+    fun updateProduct(@RequestBody product: ProductDTO): ResponseEntity<Product?> {
+        return ResponseEntity.ok(productService.updateProduct(product))
     }
 
     @GetMapping("/{spuId}")
-    fun getProductBySpuId(@PathVariable("spuId") spuId: Int): ResponseEntity<Product> {
-        val product = productService.findBySpuId(spuId)
-        return if (product != null) ResponseEntity.ok(product) else ResponseEntity
-                .notFound().build()
+    fun getProductBySpuId(@PathVariable("spuId") spuId: Long): ResponseEntity<Product> {
+        return ResponseEntity.ok(productService.getProductById(spuId = spuId))
+    }
+
+    @GetMapping
+    fun getProducts(
+            @RequestParam(defaultValue = "50") limit: Int,
+            @RequestParam(defaultValue = "0") page: Int
+    ): ResponseEntity<PageDTO<Product>> {
+        return ResponseEntity.ok(PageDTO(productService.getAllProducts(limit, page)))
     }
 }
