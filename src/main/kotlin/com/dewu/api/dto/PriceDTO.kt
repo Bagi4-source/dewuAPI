@@ -4,6 +4,6 @@ import lombok.Data
 
 @Data
 data class PriceDTO(
-        val tradeType: Int,
+        val tradeType: Long,
         val price: Int,
 )

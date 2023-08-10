@@ -13,12 +13,12 @@ data class Product(
         @Indexed(unique = true)
         val spuId: Long,
         var title: String,
+        var description: String,
         var article: String,
+        var sellDate: String,
         var images: List<String>,
         var categories: List<Long>,
         var brands: List<Long>,
         var skus: List<Long>,
-        var detail: Any,
         var properties: Any,
-        var info: Any,
 )

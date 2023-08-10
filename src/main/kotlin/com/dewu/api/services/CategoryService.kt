@@ -13,8 +13,9 @@ import org.springframework.web.server.ResponseStatusException
 class CategoryService(
         @Autowired val categoryRepository: CategoryRepository
 ) {
-    fun getCategoryById(catId: Long): Category {
-        return categoryRepository.findByCatId(catId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+
+    fun getCategoryById(categoryId: Long): Category {
+        return categoryRepository.findByCategoryId(categoryId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
     fun getAllCategories(limit: Int, page: Int): Page<Category> {
@@ -23,23 +24,21 @@ class CategoryService(
     }
 
     fun getCategoriesByIds(categoryIds: List<Long>): List<Category> {
-        if (categoryIds.size > 100)
-            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
-        return categoryRepository.findAllByCatIdIn(categoryIds)
+        return categoryRepository.findAllByCategoryIdIn(categoryIds)
     }
 
     fun updateCategory(category: CategoryDTO): Category {
-        val instance = this.getCategoryById(catId = category.catId)
+        val instance = this.getCategoryById(categoryId = category.categoryId)
         instance.name = category.name
         return categoryRepository.save(instance)
     }
 
     fun createCategory(category: CategoryDTO): Category {
         try {
-            this.getCategoryById(catId = category.catId)
+            this.getCategoryById(categoryId = category.categoryId)
         } catch (_: ResponseStatusException) {
             val instance = Category(
-                    catId = category.catId,
+                    categoryId = category.categoryId,
                     name = category.name
             )
             return categoryRepository.insert(instance)

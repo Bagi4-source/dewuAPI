@@ -16,5 +16,6 @@ data class Brand(
         @Indexed(unique = true)
         var name: String,
         var logo: String,
+        var history: String,
         var sizeGrid: Any
 )

@@ -11,6 +11,6 @@ data class Category(
         val id: String = ObjectId().toString(),
 
         @Indexed(unique = true)
-        val catId: Long,
+        val categoryId: Long,
         var name: String
 )

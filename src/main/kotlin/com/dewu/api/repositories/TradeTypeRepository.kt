@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TradeTypeRepository : MongoRepository<TradeType, String> {
-    fun findByTradeType(tradeType: Int): TradeType?
+    fun findByTradeType(tradeType: Long): TradeType?
     fun findAllBy(pageable: Pageable): Page<TradeType>
 
-    fun findAllByTradeTypeIn(tradeTypes: List<Int>): List<TradeType>
+    fun findAllByTradeTypeIn(tradeTypes: List<Long>): List<TradeType>
 
 }

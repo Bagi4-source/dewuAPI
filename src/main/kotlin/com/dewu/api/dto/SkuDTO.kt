@@ -5,6 +5,7 @@ import lombok.Data
 
 @Data
 data class SkuDTO(
+        val spuId: Long,
         val skuId: Long,
         val prices: List<PriceDTO>,
         val propertyId: Long,
@@ -12,6 +13,7 @@ data class SkuDTO(
         val sort: Int
 ){
     constructor(sku: Sku) : this(
+            spuId = sku.spuId,
             skuId = sku.skuId,
             prices = sku.prices,
             propertyId = sku.propertyId,

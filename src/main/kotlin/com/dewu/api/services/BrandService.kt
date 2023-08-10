@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
+@Service
 class BrandService(
         @Autowired val brandRepository: BrandRepository
 ) {
@@ -27,8 +29,6 @@ class BrandService(
     }
 
     fun getBrandsByIds(brandIds: List<Long>): List<Brand> {
-        if (brandIds.size > 100)
-            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
         return brandRepository.findAllByBrandIdIn(brandIds)
     }
 
@@ -36,6 +36,7 @@ class BrandService(
         val instance = this.getBrandById(brandId = brand.brandId)
         instance.name = brand.name
         instance.logo = brand.logo
+        instance.history = brand.history
         instance.sizeGrid = brand.sizeGrid
         return brandRepository.save(instance)
     }
@@ -49,6 +50,7 @@ class BrandService(
                     brandId = brand.brandId,
                     name = brand.name,
                     logo = brand.logo,
+                    history = brand.history,
                     sizeGrid = brand.sizeGrid
             )
             return brandRepository.insert(instance)

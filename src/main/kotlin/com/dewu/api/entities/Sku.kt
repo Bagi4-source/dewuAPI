@@ -13,6 +13,9 @@ data class Sku(
         val id: String = ObjectId().toString(),
 
         @Indexed(unique = true)
+        val spuId: Long,
+
+        @Indexed(unique = true)
         val skuId: Long,
 
         var prices: List<PriceDTO>,

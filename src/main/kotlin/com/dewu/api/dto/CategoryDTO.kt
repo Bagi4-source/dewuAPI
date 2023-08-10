@@ -5,11 +5,11 @@ import lombok.Data
 
 @Data
 data class CategoryDTO(
-        val catId: Long,
+        val categoryId: Long,
         val name: String,
 ) {
     constructor(category: Category) : this(
-            catId = category.catId,
+            categoryId = category.categoryId,
             name = category.name
     )
 }

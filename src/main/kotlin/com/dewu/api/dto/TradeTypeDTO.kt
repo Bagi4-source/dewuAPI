@@ -5,7 +5,7 @@ import lombok.Data
 
 @Data
 data class TradeTypeDTO(
-        val tradeType: Int,
+        val tradeType: Long,
         val arrivalTimeText: String,
         val description: String,
         val maxTime: Int

@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException
 class TradeTypeService(
         @Autowired val tradeTypeRepository: TradeTypeRepository
 ) {
-    fun getTradeTypeId(tradeType: Int): TradeType {
+    fun getTradeTypeId(tradeType: Long): TradeType {
         return tradeTypeRepository.findByTradeType(tradeType) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
@@ -21,11 +21,11 @@ class TradeTypeService(
         val pageable: Pageable = PageRequest.of(page, limit)
         return tradeTypeRepository.findAllBy(pageable)
     }
-    fun getTradeTypesByIds(tradeTypes: List<Int>): List<TradeType> {
-        if (tradeTypes.size > 100)
-            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
+
+    fun getTradeTypesByIds(tradeTypes: List<Long>): List<TradeType> {
         return tradeTypeRepository.findAllByTradeTypeIn(tradeTypes)
     }
+
     fun updateTradeType(tradeType: TradeTypeDTO): TradeType {
         val instance = this.getTradeTypeId(tradeType = tradeType.tradeType)
         instance.arrivalTimeText = tradeType.arrivalTimeText

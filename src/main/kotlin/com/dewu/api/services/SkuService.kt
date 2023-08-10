@@ -1,6 +1,7 @@
 package com.dewu.api.services
 
 import com.dewu.api.dto.SkuDTO
+import com.dewu.api.dto.SkuPricesDTO
 import com.dewu.api.entities.Sku
 import com.dewu.api.repositories.SkuRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,12 +24,10 @@ class SkuService(
     }
 
     fun getSkusByIds(skuIds: List<Long>): List<Sku> {
-        if (skuIds.size > 100)
-            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
         return skuRepository.findAllBySkuIdIn(skuIds)
     }
 
-    fun updateSku(sku: SkuDTO): Sku {
+    private fun updateSku(sku: SkuDTO): Sku {
         val instance = this.getSkuById(skuId = sku.skuId)
         instance.prices = sku.prices
         instance.propertyId = sku.propertyId
@@ -37,11 +36,42 @@ class SkuService(
         return skuRepository.save(instance)
     }
 
-    fun createSku(sku: SkuDTO): Sku {
+    private fun updatePrice(sku: SkuPricesDTO): Sku {
+        val instance = this.getSkuById(skuId = sku.skuId)
+        instance.prices = sku.prices
+        return skuRepository.save(instance)
+    }
+
+    fun updatePrices(skus: List<SkuPricesDTO>): List<Sku> {
+        val result: MutableList<Sku> = mutableListOf()
+        skus.forEach {
+            try {
+                result.add(this.updatePrice(it))
+            } catch (_: ResponseStatusException) {
+
+            }
+        }
+        return result
+    }
+
+    fun updateSkus(skus: List<SkuDTO>): List<Sku> {
+        val result: MutableList<Sku> = mutableListOf()
+        skus.forEach {
+            try {
+                result.add(this.updateSku(it))
+            } catch (_: ResponseStatusException) {
+
+            }
+        }
+        return result
+    }
+
+    private fun createSku(sku: SkuDTO): Sku {
         try {
             this.getSkuById(skuId = sku.skuId)
         } catch (_: ResponseStatusException) {
             val instance = Sku(
+                    spuId = sku.spuId,
                     skuId = sku.skuId,
                     prices = sku.prices,
                     propertyId = sku.propertyId,
@@ -51,6 +81,18 @@ class SkuService(
             return skuRepository.insert(instance)
         }
         throw ResponseStatusException(HttpStatus.CONFLICT)
+    }
+
+    fun createSkus(skus: List<SkuDTO>): List<Sku> {
+        val result: MutableList<Sku> = mutableListOf()
+        skus.forEach {
+            try {
+                result.add(this.createSku(it))
+            } catch (_: ResponseStatusException) {
+
+            }
+        }
+        return result
     }
 
 }

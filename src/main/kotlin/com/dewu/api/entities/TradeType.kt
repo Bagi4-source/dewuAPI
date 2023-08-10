@@ -13,7 +13,7 @@ data class TradeType(
         val id: String = ObjectId().toString(),
 
         @Indexed(unique = true)
-        val tradeType: Int,
+        val tradeType: Long,
         var arrivalTimeText: String,
         var description: String,
         var maxTime: Int

@@ -19,26 +19,24 @@ class ProductService(
 
     fun getAllProducts(limit: Int, page: Int): Page<Product> {
         val pageable: Pageable = PageRequest.of(page, limit)
-        return productRepository.findAll(pageable)
+        return productRepository.findAllBy(pageable)
     }
 
     fun getProductsByIds(productIds: List<Long>): List<Product> {
-        if (productIds.size > 100)
-            throw ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE)
         return productRepository.findAllBySpuIdIn(productIds)
     }
 
     fun updateProduct(product: ProductDTO): Product {
         val instance = this.getProductById(spuId = product.spuId)
         instance.title = product.title
+        instance.description = product.description
         instance.article = product.article
+        instance.sellDate = product.sellDate
         instance.images = product.images
         instance.categories = product.categories
         instance.brands = product.brands
         instance.skus = product.skus
-        instance.detail = product.detail
         instance.properties = product.properties
-        instance.info = product.info
         return productRepository.save(instance)
     }
 
@@ -49,14 +47,14 @@ class ProductService(
             val instance = Product(
                     spuId = product.spuId,
                     title = product.title,
+                    description = product.description,
                     article = product.article,
+                    sellDate = product.sellDate,
                     images = product.images,
                     categories = product.categories,
                     brands = product.brands,
                     skus = product.skus,
-                    detail = product.detail,
                     properties = product.properties,
-                    info = product.info,
             )
             return productRepository.insert(instance)
         }
